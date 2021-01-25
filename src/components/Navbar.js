@@ -1,26 +1,20 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Navbar = () => {
-  const Links = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  `;
-
-  const LinkWrapper = styled.div`
+const Links = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  a {
     margin-right: 8px;
-  `;
-
+  }
+`;
+const Navbar = () => {
   return (
     <div>
       <Links>
-        <LinkWrapper>
-          <Link to="/dashboard">Dashboard</Link>
-        </LinkWrapper>
-        <LinkWrapper>
-          <Link to="/">Home</Link>
-        </LinkWrapper>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/">Home</Link>
       </Links>
     </div>
   );
