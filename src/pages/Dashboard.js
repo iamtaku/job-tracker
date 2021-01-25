@@ -1,13 +1,12 @@
-import Job from ".././components/Job";
-import { useGlobalContext } from "../context";
+import Form from ".././components/Form";
+import Jobs from ".././components/Jobs";
+
 const Dashboard = () => {
-  const { data } = useGlobalContext();
   return (
     <div>
       <h2>this is the dashboard page</h2>
-      {data.map((item) => {
-        return <Job key={item.id} {...item.attributes}></Job>;
-      })}
+      <Form />
+      <Jobs />
     </div>
   );
 };

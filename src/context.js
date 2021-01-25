@@ -12,7 +12,7 @@ const AppProvider = ({ children }) => {
   const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(url);
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         setData(response.data.data);
       }
@@ -26,7 +26,7 @@ const AppProvider = ({ children }) => {
   }, [fetchData]);
 
   return (
-    <AppContext.Provider value={{ setLoading, data, loading }}>
+    <AppContext.Provider value={{ setLoading, data, loading, setData }}>
       {children}
     </AppContext.Provider>
   );

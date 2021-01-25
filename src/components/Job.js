@@ -12,9 +12,9 @@ const Job = ({ company, position, status, steps }) => {
         <h1>{company}</h1>
         <h2>{position}</h2>
         <h3>{status}</h3>
-        {steps.map((step) => (
+        {/* {steps.map((step) => (
           <Step key={step.id} {...step} />
-        ))}
+        ))} */}
       </JobWrapper>
     </>
   );
