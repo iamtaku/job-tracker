@@ -10,16 +10,42 @@ const FormWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
   display: grid;
   place-items: center;
   transition: var(--transition);
   visibility: visible;
   z-index: 10;
+
+  background: white;
+  min-height: 80vh;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.3)
+  );
+  z-index: 2;
+  backdrop-filter: blur(0.7rem);
 `;
 
 const FormContainer = styled.div`
-  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    to left top,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.5)
+  );
+  text-align: center;
+  border-radius: 2rem;
+  padding: 40px;
+  position: relative;
+  box-shadow: 6px 6px 20px rgba(122, 122, 122, 0.212);
+
+  h2 {
+    margin-bottom: 15px;
+  }
+  .form {
+    max-width: 800px;
+    margin: 0 auto;
+  }
   select,
   input {
     display: block;
@@ -44,22 +70,29 @@ const FormContainer = styled.div`
     font-weight: 200;
   }
 
-  input[type="submit"],
+  button[type="submit"],
   .button {
     background: #ec5990;
     color: white;
     text-transform: uppercase;
     border: none;
-    margin-top: 20px;
-    padding: 20px;
+    // margin-top: 20px;
+    padding: 10px 15px;
     font-size: 16px;
-    font-weight: 100;
-    letter-spacing: 10px;
+    font-weight: bold;
+    letter-spacing: 5px;
     display: block;
     appearance: none;
-    border-radius: 4px;
+    border-radius: 1rem;
     width: 100%;
-    font-weight: lighter;
+  }
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
   }
 `;
 
@@ -86,10 +119,11 @@ const Form = () => {
   return (
     <FormWrapper>
       <FormContainer>
-        <button onClick={closeModal}>
+        <button onClick={closeModal} className="close">
           <AiOutlineClose />
         </button>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <h2>Add a company</h2>
           <input
             name="company"
             ref={register({ required: true })}
@@ -105,7 +139,7 @@ const Form = () => {
             ref={register}
             placeholder="Application Link"
           />
-          <button type="submit"> Submit</button>
+          <button type="submit">Create</button>
         </form>
       </FormContainer>
     </FormWrapper>
