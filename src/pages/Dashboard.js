@@ -3,6 +3,11 @@ import Jobs from ".././components/Jobs";
 import { useGlobalContext } from "../context";
 import styled from "styled-components";
 
+const DashboardWrapper = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
 const Btn = styled.div`
   button {
     background: #ec5990;
@@ -23,7 +28,7 @@ const Btn = styled.div`
 const Dashboard = () => {
   const { isModalOpen, openModal } = useGlobalContext();
   return (
-    <div>
+    <DashboardWrapper>
       <h2>this is the dashboard page</h2>
       <Btn>
         <button onClick={openModal}>Create Job</button>
@@ -31,7 +36,7 @@ const Dashboard = () => {
       {/* <Form /> */}
       {isModalOpen && <Form />}
       <Jobs />
-    </div>
+    </DashboardWrapper>
   );
 };
 
