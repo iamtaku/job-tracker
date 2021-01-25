@@ -13,6 +13,9 @@ const AppProvider = ({ children }) => {
     try {
       const response = await axios.get(url);
       console.log(response);
+      if (response.status === 200) {
+        setData(response.data.data);
+      }
     } catch (error) {
       console.error(error);
     }

@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { AppProvider } from "./context";
+
 // import pages
 import Home from "./pages/Home";
 import Error from "./pages/Error";
@@ -12,7 +14,9 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/dashboard" component={Dashboard} />
+        <AppProvider>
+          <Route exact path="/dashboard" component={Dashboard} />
+        </AppProvider>
         <Route path="*" component={Error} />
       </Switch>
     </Router>
