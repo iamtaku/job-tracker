@@ -1,11 +1,15 @@
 import Form from ".././components/Form";
 import Jobs from ".././components/Jobs";
+import { useGlobalContext } from "../context";
 
 const Dashboard = () => {
+  const { isModalOpen, openModal } = useGlobalContext();
   return (
     <div>
       <h2>this is the dashboard page</h2>
-      <Form />
+      <button onClick={openModal}>Create Job</button>
+      {/* <Form /> */}
+      {isModalOpen && <Form />}
       <Jobs />
     </div>
   );

@@ -8,6 +8,7 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -21,12 +22,30 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return (
-    <AppContext.Provider value={{ setLoading, data, loading, setData }}>
+    <AppContext.Provider
+      value={{
+        setLoading,
+        data,
+        loading,
+        setData,
+        isModalOpen,
+        openModal,
+        closeModal,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
