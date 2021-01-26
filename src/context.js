@@ -8,12 +8,12 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [step, setStep] = useState({ status: false, id: null });
 
   const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(url);
-      // console.log(response);
       if (response.status === 200) {
         setData(response.data.data);
       }
@@ -22,12 +22,15 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
-  const openModal = () => {
+  const openModal = (e) => {
+    e.target.innerText === "NEXT STEP" &&
+      setStep({ status: true, id: e.target.id });
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setStep(false);
   };
 
   useEffect(() => {
@@ -44,6 +47,7 @@ const AppProvider = ({ children }) => {
         isModalOpen,
         openModal,
         closeModal,
+        step,
       }}
     >
       {children}
