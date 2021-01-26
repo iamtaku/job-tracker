@@ -98,7 +98,7 @@ const FormContainer = styled.div`
 
 const Form = () => {
   const { data, setData, closeModal, step } = useGlobalContext();
-  const { register, handleSubmit, errors, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = (formData) => {
     reset();
