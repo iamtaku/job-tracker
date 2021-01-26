@@ -42,6 +42,10 @@ const NewStepBtn = styled.div`
   }
 `;
 
+const StepGrid = styled.div`
+  display: flex;
+`;
+
 const Job = ({ company, position, status, steps, id }) => {
   const { openModal } = useGlobalContext();
   return (
@@ -53,6 +57,12 @@ const Job = ({ company, position, status, steps, id }) => {
           <h3>{position}</h3>
         </RightSide>
       </JobCard>
+
+      <StepGrid>
+        {steps.map((step) => (
+          <Step key={step.id} {...step} />
+        ))}
+      </StepGrid>
       <NewStepBtn>
         <button id={id} onClick={openModal}>
           Next Step
