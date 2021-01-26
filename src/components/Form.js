@@ -3,6 +3,7 @@ import axios from "axios";
 import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
+import { useState, useEffect } from "react";
 
 const FormWrapper = styled.div`
   position: fixed;
@@ -15,6 +16,7 @@ const FormWrapper = styled.div`
   transition: var(--transition);
   visibility: visible;
   z-index: 10;
+  transition: all 500ms ease-in-out;
 
   background: white;
   min-height: 80vh;
@@ -99,28 +101,81 @@ const FormContainer = styled.div`
 const Form = () => {
   const { data, setData, closeModal, step } = useGlobalContext();
   const { register, handleSubmit, reset } = useForm();
+  const [formDataValue, setFormDataValue] = useState({
+    status: "",
+    date: "",
+  });
+
+  useEffect(() => {
+    if (step.status === "PATCH_STEP" || step.status === "PATCH_JOB") {
+      let newFormData = "";
+      if (step.status === "PATCH_STEP") {
+        data.forEach((item) => {
+          // console.log(item);
+          item.attributes.steps.forEach((s) => {
+            if (s.id === step.step_id || s.id === step.job_id) {
+              // console.log(s);
+              newFormData = s;
+            }
+          });
+        });
+      }
+      if (step.status === "PATCH_JOB") {
+        newFormData = data.filter((item) => item.id === step.job_id)[0];
+      }
+      console.log(newFormData.attributes);
+      setFormDataValue(...newFormData);
+      // console.log(formDataValue);
+    }
+  }, [step]);
 
   const onSubmit = (formData) => {
     reset();
-    let urlToSubmit = "http://localhost:3000/api/v1/jobs";
+    let url = "http://localhost:3000/api/v1/jobs";
     let formType = "job";
 
-    if (step.status) {
-      // console.log(formData);
-      urlToSubmit = `http://localhost:3000/api/v1/jobs/${step.id}/steps`;
+    if (step.status === "CREATE_STEP") {
+      url = `http://localhost:3000/api/v1/jobs/${step.id}/steps`;
       formType = "step";
     }
 
-    postForm(urlToSubmit, formData, formType);
+    let method = "post";
+
+    postForm({ url, formData, formType, method });
   };
 
-  const postForm = (url, formData, formType) => {
+  const patchForm = ({ url, formData, formType }) => {
     axios
-      .post(url, {
+      .patch(url, {
         [formType]: { ...formData },
       })
       .then((response) => {
-        // console.log(data);
+        let newData = [...data, response.data.data];
+        if (formType === "step") {
+          newData = data.map((item) => {
+            if (item.id === response.data.data.relationships.job.data.id) {
+              item.attributes.steps.push({
+                id: parseInt(response.data.data.id),
+                ...response.data.data.attributes,
+              });
+              return item;
+            }
+            return item;
+          });
+        }
+        // console.log(newData);
+        setData(newData);
+        register.value = "";
+        closeModal();
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const postForm = ({ url, formData, formType, method }) => {
+    axios[method](url, {
+      [formType]: { ...formData },
+    })
+      .then((response) => {
         let newData = [...data, response.data.data];
         if (formType === "step") {
           newData = data.map((item) => {
@@ -144,7 +199,13 @@ const Form = () => {
       });
   };
 
-  if (step.status) {
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormDataValue({ ...formDataValue, [name]: value });
+  };
+
+  if (step.status === "CREATE_STEP") {
     return (
       <FormWrapper>
         <FormContainer>
@@ -157,6 +218,8 @@ const Form = () => {
               name="status"
               ref={register({ required: true })}
               placeholder="What's next?"
+              value={formDataValue.status}
+              onChange={handleChange}
             />
             <input type="datetime-local" ref={register} name="date" />
             <input
@@ -169,6 +232,14 @@ const Form = () => {
         </FormContainer>
       </FormWrapper>
     );
+  }
+
+  if (step.status === "PATCH_STEP") {
+    console.log("patch step");
+  }
+
+  if (step.status === "PATCH_JOB") {
+    console.log("patch alert");
   }
 
   return (

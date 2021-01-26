@@ -9,7 +9,7 @@ const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [step, setStep] = useState({ status: false, id: null });
+  const [step, setStep] = useState({ status: false, job_id: null });
 
   const fetchData = useCallback(async () => {
     try {
@@ -23,8 +23,13 @@ const AppProvider = ({ children }) => {
   }, []);
 
   const openModal = (e) => {
+    console.log(e.target);
     e.target.innerText === "NEXT STEP" &&
-      setStep({ status: true, id: e.target.id });
+      setStep({ status: "CREATE_STEP", job_id: e.target.id });
+    e.target.dataset.id === "PATCH_STEP" &&
+      setStep({ status: "PATCH_STEP", step_id: parseInt(e.target.id) });
+    e.target.dataset.id === "PATCH_JOB" &&
+      setStep({ status: "PATCH_JOB", job_id: e.target.id });
     setIsModalOpen(true);
   };
 

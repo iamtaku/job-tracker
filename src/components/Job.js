@@ -1,6 +1,7 @@
 import Step from "./Step";
 import styled from "styled-components";
 import { useGlobalContext } from "../context";
+import { AiFillEdit } from "react-icons/ai";
 
 const JobWrapper = styled.div`
   display: flex;
@@ -11,6 +12,13 @@ const JobCard = styled.div`
   display: flex;
   padding: 8px;
   align-items: center;
+  position: relative;
+  margin-right: 8px;
+  svg {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+  }
 `;
 
 const RightSide = styled.div`
@@ -23,23 +31,21 @@ const RightSide = styled.div`
   }
 `;
 
-const NewStepBtn = styled.div`
+const NewStepBtn = styled.button`
   width: 100px;
-  button {
-    background: none;
-    color: white;
-    text-transform: uppercase;
-    border: 1px solid grey;
-    // margin-top: 20px;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 5px;
-    display: block;
-    appearance: none;
-    // border-radius: 1rem;
-    width: 100%;
-  }
+  background: none;
+  color: white;
+  text-transform: uppercase;
+  border: 1px solid grey;
+  // margin-top: 20px;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  display: block;
+  appearance: none;
+  // border-radius: 1rem;
+  // width: 100%;
 `;
 
 const StepGrid = styled.div`
@@ -56,6 +62,7 @@ const Job = ({ company, position, status, steps, id }) => {
           <p>{status}</p>
           <h3>{position}</h3>
         </RightSide>
+        <AiFillEdit id={id} onClick={openModal} data-id="PATCH_JOB" />
       </JobCard>
 
       <StepGrid>
@@ -63,10 +70,8 @@ const Job = ({ company, position, status, steps, id }) => {
           <Step key={step.id} {...step} />
         ))}
       </StepGrid>
-      <NewStepBtn>
-        <button id={id} onClick={openModal}>
-          Next Step
-        </button>
+      <NewStepBtn id={id} onClick={openModal}>
+        Next Step
       </NewStepBtn>
     </JobWrapper>
   );
