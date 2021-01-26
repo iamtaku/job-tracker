@@ -97,17 +97,44 @@ const FormContainer = styled.div`
 `;
 
 const Form = () => {
-  const { data, setData, closeModal } = useGlobalContext();
+  const { data, setData, closeModal, step } = useGlobalContext();
   const { register, handleSubmit, errors, reset } = useForm();
 
   const onSubmit = (formData) => {
     reset();
+    let urlToSubmit = "http://localhost:3000/api/v1/jobs";
+    let formType = "job";
+
+    if (step.status) {
+      // console.log(formData);
+      urlToSubmit = `http://localhost:3000/api/v1/jobs/${step.id}/steps`;
+      formType = "step";
+    }
+
+    postForm(urlToSubmit, formData, formType);
+  };
+
+  const postForm = (url, formData, formType) => {
     axios
-      .post("http://localhost:3000/api/v1/jobs", {
-        job: { ...formData },
+      .post(url, {
+        [formType]: { ...formData },
       })
       .then((response) => {
-        const newData = [...data, response.data.data];
+        // console.log(data);
+        let newData = [...data, response.data.data];
+        if (formType === "step") {
+          newData = data.map((item) => {
+            if (item.id === response.data.data.relationships.job.data.id) {
+              item.attributes.steps.push({
+                id: parseInt(response.data.data.id),
+                ...response.data.data.attributes,
+              });
+              return item;
+            }
+            return item;
+          });
+        }
+        // console.log(newData);
         setData(newData);
         register.value = "";
         closeModal();
@@ -116,6 +143,34 @@ const Form = () => {
         console.log(error);
       });
   };
+
+  if (step.status) {
+    return (
+      <FormWrapper>
+        <FormContainer>
+          <button onClick={closeModal} className="close">
+            <AiOutlineClose />
+          </button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <h2>Add the next Step</h2>
+            <input
+              name="status"
+              ref={register({ required: true })}
+              placeholder="What's next?"
+            />
+            <input type="datetime-local" ref={register} name="date" />
+            <input
+              name="application_link"
+              ref={register}
+              placeholder="Application Link"
+            />
+            <button type="submit">Create</button>
+          </form>
+        </FormContainer>
+      </FormWrapper>
+    );
+  }
+
   return (
     <FormWrapper>
       <FormContainer>

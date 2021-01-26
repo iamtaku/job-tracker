@@ -8,32 +8,27 @@ const DashboardWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const Btn = styled.div`
-  button {
-    background: #ec5990;
-    color: white;
-    text-transform: uppercase;
-    border: none;
-    // margin-top: 20px;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 100;
-    letter-spacing: 5px;
-    display: block;
-    appearance: none;
-    border-radius: 1rem;
-    width: 100%;
-  }
+const Btn = styled.button`
+  background: #ec5990;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  // margin-top: 20px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 100;
+  letter-spacing: 5px;
+  display: block;
+  appearance: none;
+  border-radius: 1rem;
+  width: 100%;
 `;
 const Dashboard = () => {
   const { isModalOpen, openModal } = useGlobalContext();
   return (
     <DashboardWrapper>
       <h2>this is the dashboard page</h2>
-      <Btn>
-        <button onClick={openModal}>Create Job</button>
-      </Btn>
-      {/* <Form /> */}
+      <Btn onClick={openModal}>Create Job</Btn>
       {isModalOpen && <Form />}
       <Jobs />
     </DashboardWrapper>
