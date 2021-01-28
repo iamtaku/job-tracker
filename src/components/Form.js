@@ -3,7 +3,7 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
-import HandleFormSubmit from "../HandleFormSubmit";
+import axios from "axios";
 
 const FormWrapper = styled.div`
   position: fixed;
@@ -99,7 +99,7 @@ const FormContainer = styled.div`
 `;
 
 const Form = () => {
-  const { data, closeModal, step } = useGlobalContext();
+  const { data, setData, closeModal, step } = useGlobalContext();
   const { register, handleSubmit, reset } = useForm();
   const [formDataValue, setFormDataValue] = useState({
     status: "",
@@ -152,12 +152,63 @@ const Form = () => {
       method = "patch";
     }
 
-    HandleFormSubmit({ url, formData, formType, method, register });
+    handleFormSubmit({ url, formData, formType, method });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormDataValue({ ...formDataValue, [name]: value });
+  };
+
+  const handleFormSubmit = ({ url, formData, formType, method }) => {
+    axios[method](url, {
+      [formType]: { ...formData },
+    })
+      .then((response) => {
+        let newData = [...data, response.data.data];
+        if (formType === "step") {
+          newData = data.map((item) => {
+            if (item.id === response.data.data.relationships.job.data.id) {
+              if (method === "post") {
+                item.attributes.steps.push({
+                  id: parseInt(response.data.data.id),
+                  ...response.data.data.attributes,
+                });
+                return item;
+              }
+              if (method === "patch") {
+                let itemToUpdate = item.attributes.steps.findIndex(
+                  (item) => item.id === parseInt(response.data.data.id)
+                );
+                item.attributes.steps[itemToUpdate] = {
+                  id: parseInt(response.data.data.id),
+                  ...response.data.data.attributes,
+                };
+                return item;
+              }
+              return item;
+            }
+            return item;
+          });
+        }
+        if (method === "patch") {
+          newData = data.map((item) => {
+            if (item.id === response.data.data.id) {
+              return {
+                ...response.data.data,
+                id: response.data.data.id,
+              };
+            }
+            return item;
+          });
+        }
+        setData(newData);
+        register.value = "";
+        closeModal();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
