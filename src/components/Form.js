@@ -99,7 +99,7 @@ const FormContainer = styled.div`
 `;
 
 const Form = () => {
-  const { data, setData, closeModal, step } = useGlobalContext();
+  const { data, closeModal, step } = useGlobalContext();
   const { register, handleSubmit, reset } = useForm();
   const [formDataValue, setFormDataValue] = useState({
     status: "",
