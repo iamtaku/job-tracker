@@ -14,14 +14,13 @@ const StepContainer = styled.div`
     font-weight: 500;
     opacity: 0.8;
   }
-
-  button {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    border: none;
-    background: none;
-  }
+`;
+const EditBtn = styled.button`
+  background: none;
+  border: none;
+  position: absolute;
+  top: 4px;
+  right: 4px;
 `;
 
 const Step = ({ id, date, status, job_id }) => {
@@ -33,9 +32,9 @@ const Step = ({ id, date, status, job_id }) => {
         {date}
       </Moment>
       <h3>{status}</h3>
-      <button onClick={openModal} data-id="PATCH_STEP" id={id}>
-        <AiFillEdit data-id="PATCH_STEP" id={id} />
-      </button>
+      <EditBtn onClick={openModal} data-id="PATCH_STEP" id={id}>
+        <AiFillEdit />
+      </EditBtn>
     </StepContainer>
   );
 };

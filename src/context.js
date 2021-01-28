@@ -23,13 +23,13 @@ const AppProvider = ({ children }) => {
   }, []);
 
   const openModal = (e) => {
-    console.log(e.target.id);
-    e.target.innerText === "NEXT STEP" &&
-      setStep({ status: "CREATE_STEP", step_id: parseInt(e.target.id) });
-    e.target.dataset.id === "PATCH_STEP" &&
-      setStep({ status: "PATCH_STEP", step_id: parseInt(e.target.id) });
-    e.target.dataset.id === "PATCH_JOB" &&
-      setStep({ status: "PATCH_JOB", job_id: e.target.id });
+    console.log("context :", e.currentTarget.id, e.currentTarget, data);
+    e.currentTarget.innerText === "NEXT STEP" &&
+      setStep({ status: "CREATE_STEP", step_id: parseInt(e.currentTarget.id) });
+    e.currentTarget.dataset.id === "PATCH_STEP" &&
+      setStep({ status: "PATCH_STEP", step_id: parseInt(e.currentTarget.id) });
+    e.currentTarget.dataset.id === "PATCH_JOB" &&
+      setStep({ status: "PATCH_JOB", job_id: e.currentTarget.id });
     setIsModalOpen(true);
   };
 

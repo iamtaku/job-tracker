@@ -14,11 +14,6 @@ const JobCard = styled.div`
   align-items: center;
   position: relative;
   margin-right: 8px;
-  svg {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-  }
 `;
 
 const RightSide = styled.div`
@@ -52,6 +47,11 @@ const StepGrid = styled.div`
   display: flex;
 `;
 
+const EditBtn = styled.button`
+  background: none;
+  border: none;
+`;
+
 const Job = ({ company, position, status, steps, id }) => {
   const { openModal } = useGlobalContext();
   return (
@@ -62,7 +62,9 @@ const Job = ({ company, position, status, steps, id }) => {
           <p>{status}</p>
           <h3>{position}</h3>
         </RightSide>
-        <AiFillEdit id={id} onClick={openModal} data-id="PATCH_JOB" />
+        <EditBtn id={id} onClick={openModal} data-id="PATCH_JOB">
+          <AiFillEdit />
+        </EditBtn>
       </JobCard>
 
       <StepGrid>

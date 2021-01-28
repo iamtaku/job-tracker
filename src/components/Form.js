@@ -126,6 +126,7 @@ const Form = () => {
       }
       if (step.status === "PATCH_JOB") {
         newFormData = data.filter((item) => item.id === step.job_id)[0];
+        newFormData = newFormData.attributes;
       }
       console.log(newFormData);
       setFormDataValue(newFormData);
@@ -139,6 +140,7 @@ const Form = () => {
     let method = "post";
 
     if (step.status === "PATCH_JOB") {
+      url = `http://localhost:3000/api/v1/jobs/${step.job_id}`;
       method = "patch";
     }
     if (step.status === "CREATE_STEP") {
@@ -189,6 +191,24 @@ const Form = () => {
             return item;
           });
         }
+        if (method === "patch") {
+          console.log("job patch", response.data.data.id);
+          newData = data.map((item) => {
+            if (item.id === response.data.data.id) {
+              console.log({
+                ...response.data.data,
+                id: response.data.data.id,
+              });
+              return {
+                // id: parseInt(response.data.data.id),
+                // type: response.data.data.type
+                ...response.data.data,
+                id: response.data.data.id,
+              };
+            }
+            return item;
+          });
+        }
         setData(newData);
         register.value = "";
         closeModal();
@@ -199,12 +219,11 @@ const Form = () => {
   };
 
   const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     setFormDataValue({ ...formDataValue, [name]: value });
   };
 
-  if (step.status === "CREATE_STEP" || "PATCH_STEP") {
+  if (step.status === "CREATE_STEP" || step.status === "PATCH_STEP") {
     return (
       <FormWrapper>
         <FormContainer>
@@ -234,9 +253,13 @@ const Form = () => {
     );
   }
 
-  if (step.status === "PATCH_JOB") {
-    console.log("patch alert");
-  }
+  // if (step.status === "PATCH_JOB") {
+  //   console.log("patch alert");
+  // }
+
+  // if (step.status === "CREATE_JOB") {
+  //   console.log("create job");
+  // }
 
   return (
     <FormWrapper>
@@ -250,16 +273,22 @@ const Form = () => {
             name="company"
             ref={register({ required: true })}
             placeholder="Company"
+            value={formDataValue.company}
+            onChange={handleChange}
           />
           <input
             name="position"
             ref={register({ required: true })}
             placeholder="Position"
+            value={formDataValue.position}
+            onChange={handleChange}
           />
           <input
             name="application_link"
             ref={register}
             placeholder="Application Link"
+            value={formDataValue.application_link}
+            onChange={handleChange}
           />
           <button type="submit">Create</button>
         </form>
