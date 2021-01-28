@@ -28,7 +28,9 @@ const Dashboard = () => {
   return (
     <DashboardWrapper>
       <h2>this is the dashboard page</h2>
-      <Btn onClick={openModal}>Create Job</Btn>
+      <Btn onClick={openModal} data-id="CREATE_JOB">
+        Create Job
+      </Btn>
       {isModalOpen && <Form />}
       <Jobs />
     </DashboardWrapper>

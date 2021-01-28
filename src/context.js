@@ -28,6 +28,8 @@ const AppProvider = ({ children }) => {
       setStep({ status: "CREATE_STEP", step_id: parseInt(e.currentTarget.id) });
     e.currentTarget.dataset.id === "PATCH_STEP" &&
       setStep({ status: "PATCH_STEP", step_id: parseInt(e.currentTarget.id) });
+    e.currentTarget.dataset.id === "CREATE_JOB" &&
+      setStep({ status: "CREATE_JOB" });
     e.currentTarget.dataset.id === "PATCH_JOB" &&
       setStep({ status: "PATCH_JOB", job_id: e.currentTarget.id });
     setIsModalOpen(true);

@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
+import HandleFormSubmit from "../HandleFormSubmit";
 
 const FormWrapper = styled.div`
   position: fixed;
@@ -115,10 +115,8 @@ const Form = () => {
           item.attributes.steps.forEach((s) => {
             if (s.id === step.step_id || s.id === step.job_id) {
               newFormData = s;
-              // console.log(newFormData.date);
               let { date } = newFormData;
               date = new Date(date);
-              // console.log(date.toISOString());
               newFormData.date = date.toISOString();
             }
           });
@@ -131,7 +129,7 @@ const Form = () => {
       console.log(newFormData);
       setFormDataValue(newFormData);
     }
-  }, [step]);
+  }, [step, data]);
 
   const onSubmit = (formData) => {
     reset();
@@ -154,112 +152,13 @@ const Form = () => {
       method = "patch";
     }
 
-    console.log(url, step, method);
-
-    postForm({ url, formData, formType, method });
-  };
-
-  const postForm = ({ url, formData, formType, method }) => {
-    axios[method](url, {
-      [formType]: { ...formData },
-    })
-      .then((response) => {
-        console.log(response);
-        let newData = [...data, response.data.data];
-        if (formType === "step") {
-          newData = data.map((item) => {
-            if (item.id === response.data.data.relationships.job.data.id) {
-              if (method === "post") {
-                item.attributes.steps.push({
-                  id: parseInt(response.data.data.id),
-                  ...response.data.data.attributes,
-                });
-                return item;
-              }
-              if (method === "patch") {
-                let itemToUpdate = item.attributes.steps.findIndex(
-                  (item) => item.id === parseInt(response.data.data.id)
-                );
-                item.attributes.steps[itemToUpdate] = {
-                  id: parseInt(response.data.data.id),
-                  ...response.data.data.attributes,
-                };
-                return item;
-              }
-              return item;
-            }
-            return item;
-          });
-        }
-        if (method === "patch") {
-          console.log("job patch", response.data.data.id);
-          newData = data.map((item) => {
-            if (item.id === response.data.data.id) {
-              console.log({
-                ...response.data.data,
-                id: response.data.data.id,
-              });
-              return {
-                // id: parseInt(response.data.data.id),
-                // type: response.data.data.type
-                ...response.data.data,
-                id: response.data.data.id,
-              };
-            }
-            return item;
-          });
-        }
-        setData(newData);
-        register.value = "";
-        closeModal();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    HandleFormSubmit({ url, formData, formType, method, register });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormDataValue({ ...formDataValue, [name]: value });
   };
-
-  if (step.status === "CREATE_STEP" || step.status === "PATCH_STEP") {
-    return (
-      <FormWrapper>
-        <FormContainer>
-          <button onClick={closeModal} className="close">
-            <AiOutlineClose />
-          </button>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <h2>Add the next Step</h2>
-            <input
-              name="status"
-              ref={register({ required: true })}
-              placeholder="What's next?"
-              value={formDataValue.status}
-              onChange={handleChange}
-            />
-            <input
-              type="datetime-local"
-              ref={register}
-              name="date"
-              value={formDataValue.date}
-              onChange={handleChange}
-            />
-            <button type="submit">Create</button>
-          </form>
-        </FormContainer>
-      </FormWrapper>
-    );
-  }
-
-  // if (step.status === "PATCH_JOB") {
-  //   console.log("patch alert");
-  // }
-
-  // if (step.status === "CREATE_JOB") {
-  //   console.log("create job");
-  // }
 
   return (
     <FormWrapper>
@@ -268,29 +167,66 @@ const Form = () => {
           <AiOutlineClose />
         </button>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>Add a company</h2>
-          <input
-            name="company"
-            ref={register({ required: true })}
-            placeholder="Company"
-            value={formDataValue.company}
-            onChange={handleChange}
-          />
-          <input
-            name="position"
-            ref={register({ required: true })}
-            placeholder="Position"
-            value={formDataValue.position}
-            onChange={handleChange}
-          />
-          <input
-            name="application_link"
-            ref={register}
-            placeholder="Application Link"
-            value={formDataValue.application_link}
-            onChange={handleChange}
-          />
-          <button type="submit">Create</button>
+          {step.status === "CREATE_STEP" || step.status === "PATCH_STEP" ? (
+            <>
+              <h2>
+                {step.status === "CREATE_STEP" ? (
+                  <span>Add the next step</span>
+                ) : (
+                  <span>Update the step</span>
+                )}
+              </h2>
+              <input
+                name="status"
+                ref={register({ required: true })}
+                placeholder="What's next?"
+                value={formDataValue.status || ""}
+                onChange={handleChange}
+              />
+              <input
+                type="datetime-local"
+                ref={register}
+                name="date"
+                value={formDataValue.date || ""}
+                onChange={handleChange}
+              />
+            </>
+          ) : (
+            <>
+              <h2>
+                {step.status === "CREATE_JOB" ? (
+                  <span>Add a Company</span>
+                ) : (
+                  <span>Update the Company</span>
+                )}
+              </h2>
+              <input
+                name="company"
+                ref={register({ required: true })}
+                placeholder="Company"
+                value={formDataValue.company || ""}
+                onChange={handleChange}
+              />
+              <input
+                name="position"
+                ref={register({ required: true })}
+                placeholder="Position"
+                value={formDataValue.position || ""}
+                onChange={handleChange}
+              />
+              <input
+                name="application_link"
+                ref={register}
+                placeholder="Application Link"
+                value={formDataValue.application_link || ""}
+                onChange={handleChange}
+              />
+            </>
+          )}
+          <button type="submit">
+            {step.status[0] === "C" ? "Create a " : "Update the "}
+            {step.status.split("").pop() === "B" ? "Job" : "Step"}
+          </button>
         </form>
       </FormContainer>
     </FormWrapper>
