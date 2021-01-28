@@ -104,6 +104,7 @@ const Form = () => {
   const [formDataValue, setFormDataValue] = useState({
     status: "",
     date: "",
+    application_link: "",
   });
 
   useEffect(() => {
@@ -111,11 +112,14 @@ const Form = () => {
       let newFormData = "";
       if (step.status === "PATCH_STEP") {
         data.forEach((item) => {
-          // console.log(item);
           item.attributes.steps.forEach((s) => {
             if (s.id === step.step_id || s.id === step.job_id) {
-              // console.log(s);
               newFormData = s;
+              // console.log(newFormData.date);
+              let { date } = newFormData;
+              date = new Date(date);
+              // console.log(date.toISOString());
+              newFormData.date = date.toISOString();
             }
           });
         });
@@ -123,9 +127,8 @@ const Form = () => {
       if (step.status === "PATCH_JOB") {
         newFormData = data.filter((item) => item.id === step.job_id)[0];
       }
-      console.log(newFormData.attributes);
-      setFormDataValue(...newFormData);
-      // console.log(formDataValue);
+      console.log(newFormData);
+      setFormDataValue(newFormData);
     }
   }, [step]);
 
@@ -133,42 +136,25 @@ const Form = () => {
     reset();
     let url = "http://localhost:3000/api/v1/jobs";
     let formType = "job";
+    let method = "post";
 
+    if (step.status === "PATCH_JOB") {
+      method = "patch";
+    }
     if (step.status === "CREATE_STEP") {
-      url = `http://localhost:3000/api/v1/jobs/${step.id}/steps`;
+      url = `http://localhost:3000/api/v1/jobs/${step.step_id}/steps`;
       formType = "step";
     }
 
-    let method = "post";
+    if (step.status === "PATCH_STEP") {
+      url = `http://localhost:3000/api/v1/steps/${step.step_id}/`;
+      formType = "step";
+      method = "patch";
+    }
+
+    console.log(url, step, method);
 
     postForm({ url, formData, formType, method });
-  };
-
-  const patchForm = ({ url, formData, formType }) => {
-    axios
-      .patch(url, {
-        [formType]: { ...formData },
-      })
-      .then((response) => {
-        let newData = [...data, response.data.data];
-        if (formType === "step") {
-          newData = data.map((item) => {
-            if (item.id === response.data.data.relationships.job.data.id) {
-              item.attributes.steps.push({
-                id: parseInt(response.data.data.id),
-                ...response.data.data.attributes,
-              });
-              return item;
-            }
-            return item;
-          });
-        }
-        // console.log(newData);
-        setData(newData);
-        register.value = "";
-        closeModal();
-      })
-      .catch((error) => console.log(error));
   };
 
   const postForm = ({ url, formData, formType, method }) => {
@@ -176,20 +162,33 @@ const Form = () => {
       [formType]: { ...formData },
     })
       .then((response) => {
+        console.log(response);
         let newData = [...data, response.data.data];
         if (formType === "step") {
           newData = data.map((item) => {
             if (item.id === response.data.data.relationships.job.data.id) {
-              item.attributes.steps.push({
-                id: parseInt(response.data.data.id),
-                ...response.data.data.attributes,
-              });
+              if (method === "post") {
+                item.attributes.steps.push({
+                  id: parseInt(response.data.data.id),
+                  ...response.data.data.attributes,
+                });
+                return item;
+              }
+              if (method === "patch") {
+                let itemToUpdate = item.attributes.steps.findIndex(
+                  (item) => item.id === parseInt(response.data.data.id)
+                );
+                item.attributes.steps[itemToUpdate] = {
+                  id: parseInt(response.data.data.id),
+                  ...response.data.data.attributes,
+                };
+                return item;
+              }
               return item;
             }
             return item;
           });
         }
-        // console.log(newData);
         setData(newData);
         register.value = "";
         closeModal();
@@ -205,7 +204,7 @@ const Form = () => {
     setFormDataValue({ ...formDataValue, [name]: value });
   };
 
-  if (step.status === "CREATE_STEP") {
+  if (step.status === "CREATE_STEP" || "PATCH_STEP") {
     return (
       <FormWrapper>
         <FormContainer>
@@ -221,21 +220,18 @@ const Form = () => {
               value={formDataValue.status}
               onChange={handleChange}
             />
-            <input type="datetime-local" ref={register} name="date" />
             <input
-              name="application_link"
+              type="datetime-local"
               ref={register}
-              placeholder="Application Link"
+              name="date"
+              value={formDataValue.date}
+              onChange={handleChange}
             />
             <button type="submit">Create</button>
           </form>
         </FormContainer>
       </FormWrapper>
     );
-  }
-
-  if (step.status === "PATCH_STEP") {
-    console.log("patch step");
   }
 
   if (step.status === "PATCH_JOB") {

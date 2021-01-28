@@ -66,9 +66,11 @@ const Job = ({ company, position, status, steps, id }) => {
       </JobCard>
 
       <StepGrid>
-        {steps.map((step) => (
-          <Step key={step.id} {...step} />
-        ))}
+        {steps
+          .sort((a, b) => parseInt(a.id) - parseInt(b.id))
+          .map((step) => (
+            <Step key={step.id} {...step} />
+          ))}
       </StepGrid>
       <NewStepBtn id={id} onClick={openModal}>
         Next Step
