@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useCallback } from "react";
 import axios from "axios";
+import { HandleFormSubmit } from "./helpers";
 
 const url = "http://localhost:3000/api/v1/jobs";
 const AppContext = React.createContext();
@@ -23,7 +24,7 @@ const AppProvider = ({ children }) => {
   }, []);
 
   const openModal = (e) => {
-    console.log("context :", e.currentTarget.id, e.currentTarget, data);
+    // console.log("context :", e.currentTarget.id, e.currentTarget, data);
     e.currentTarget.innerText === "NEXT STEP" &&
       setStep({ status: "CREATE_STEP", step_id: parseInt(e.currentTarget.id) });
     e.currentTarget.dataset.id === "PATCH_STEP" &&
@@ -38,6 +39,26 @@ const AppProvider = ({ children }) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setStep(false);
+  };
+
+  const handleJob = (e) => {
+    let formData = data.filter((item) => item.id === e.currentTarget.id)[0];
+
+    if (e.currentTarget.dataset.job === "accept") {
+      formData.attributes.status = "accepted";
+    }
+    if (e.currentTarget.dataset.job === "reject") {
+      formData.attributes.status = "rejected";
+    }
+
+    HandleFormSubmit({
+      url: `http://localhost:3000/api/v1/jobs/${formData.id}`,
+      formData: formData.attributes,
+      formType: "job",
+      method: "patch",
+      data,
+      setData,
+    });
   };
 
   useEffect(() => {
@@ -55,6 +76,8 @@ const AppProvider = ({ children }) => {
         openModal,
         closeModal,
         step,
+        handleJob,
+        HandleFormSubmit,
       }}
     >
       {children}

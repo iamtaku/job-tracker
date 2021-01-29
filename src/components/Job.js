@@ -1,7 +1,7 @@
 import Step from "./Step";
 import styled from "styled-components";
 import { useGlobalContext } from "../context";
-import { AiFillEdit } from "react-icons/ai";
+import { EditButton, NextButton, AcceptRejectButton } from "./Buttons";
 
 const JobWrapper = styled.div`
   display: flex;
@@ -26,34 +26,12 @@ const RightSide = styled.div`
   }
 `;
 
-const NewStepBtn = styled.button`
-  width: 100px;
-  background: none;
-  color: white;
-  text-transform: uppercase;
-  border: 1px solid grey;
-  // margin-top: 20px;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 5px;
-  display: block;
-  appearance: none;
-  // border-radius: 1rem;
-  // width: 100%;
-`;
-
 const StepGrid = styled.div`
   display: flex;
 `;
 
-const EditBtn = styled.button`
-  background: none;
-  border: none;
-`;
-
 const Job = ({ company, position, status, steps, id }) => {
-  const { openModal } = useGlobalContext();
+  const { openModal, handleJob } = useGlobalContext();
   return (
     <JobWrapper>
       <JobCard>
@@ -62,11 +40,8 @@ const Job = ({ company, position, status, steps, id }) => {
           <p>{status}</p>
           <h3>{position}</h3>
         </RightSide>
-        <EditBtn id={id} onClick={openModal} data-id="PATCH_JOB">
-          <AiFillEdit />
-        </EditBtn>
+        <EditButton id={id} onClick={openModal} dataid="PATCH_JOB" />
       </JobCard>
-
       <StepGrid>
         {steps
           .sort((a, b) => parseInt(a.id) - parseInt(b.id))
@@ -74,9 +49,17 @@ const Job = ({ company, position, status, steps, id }) => {
             <Step key={step.id} {...step} />
           ))}
       </StepGrid>
-      <NewStepBtn id={id} onClick={openModal}>
+      <NextButton id={id} onClick={openModal}>
         Next Step
-      </NewStepBtn>
+      </NextButton>
+      <div className="right">
+        <AcceptRejectButton onClick={handleJob} id={id} datajob="accept">
+          accepted
+        </AcceptRejectButton>
+        <AcceptRejectButton onClick={handleJob} id={id} datajob="reject">
+          rejected
+        </AcceptRejectButton>
+      </div>
     </JobWrapper>
   );
 };
