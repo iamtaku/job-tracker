@@ -275,7 +275,7 @@ const Form = () => {
             </>
           )}
           <button type="submit">
-            {step.status[0] === "C" ? "Create a " : "Update the "}
+            {step.status[0] === "C" ? "Create " : "Update "}
             {step.status.split("").pop() === "B" ? "Job" : "Step"}
           </button>
         </form>
