@@ -2,10 +2,14 @@ import Form from ".././components/Form";
 import Jobs from ".././components/Jobs";
 import { useGlobalContext } from "../context";
 import styled from "styled-components";
+import { device } from '../device';
 
 const DashboardWrapper = styled.div`
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
+  @media ${device.laptop} {
+    width: 80%;
+  }
 `;
 
 const Btn = styled.button`

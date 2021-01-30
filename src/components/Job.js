@@ -6,7 +6,7 @@ import { device } from "../device";
 
 const JobWrapper = styled.div`
   display: grid;
-
+  width: 100%;
   @media ${device.laptop} {
     grid-template-columns: 1fr 2fr;
   }
