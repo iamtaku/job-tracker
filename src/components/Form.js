@@ -142,6 +142,9 @@ const Form = () => {
     let formType = "job";
     let method = "post";
 
+    if (step.status === "CREATE_JOB") {
+      url = `${url}jobs`;
+    }
     if (step.status === "PATCH_JOB") {
       url = `${url}jobs/${step.job_id}`;
       method = "patch";
