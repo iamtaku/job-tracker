@@ -3,7 +3,6 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 const FormWrapper = styled.div`
   position: fixed;
@@ -99,7 +98,13 @@ const FormContainer = styled.div`
 `;
 
 const Form = () => {
-  const { data, setData, closeModal, step } = useGlobalContext();
+  const {
+    data,
+    setData,
+    closeModal,
+    step,
+    HandleFormSubmit,
+  } = useGlobalContext();
   const { register, handleSubmit, reset } = useForm();
   const [formDataValue, setFormDataValue] = useState({
     status: "",
@@ -126,7 +131,6 @@ const Form = () => {
         newFormData = data.filter((item) => item.id === step.job_id)[0];
         newFormData = newFormData.attributes;
       }
-      console.log(newFormData);
       setFormDataValue(newFormData);
     }
   }, [step, data]);
@@ -152,63 +156,14 @@ const Form = () => {
       method = "patch";
     }
 
-    handleFormSubmit({ url, formData, formType, method });
+    HandleFormSubmit({ url, formData, formType, method, data, setData });
+    register.value = "";
+    closeModal();
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormDataValue({ ...formDataValue, [name]: value });
-  };
-
-  const handleFormSubmit = ({ url, formData, formType, method }) => {
-    axios[method](url, {
-      [formType]: { ...formData },
-    })
-      .then((response) => {
-        let newData = [...data, response.data.data];
-        if (formType === "step") {
-          newData = data.map((item) => {
-            if (item.id === response.data.data.relationships.job.data.id) {
-              if (method === "post") {
-                item.attributes.steps.push({
-                  id: parseInt(response.data.data.id),
-                  ...response.data.data.attributes,
-                });
-                return item;
-              }
-              if (method === "patch") {
-                let itemToUpdate = item.attributes.steps.findIndex(
-                  (item) => item.id === parseInt(response.data.data.id)
-                );
-                item.attributes.steps[itemToUpdate] = {
-                  id: parseInt(response.data.data.id),
-                  ...response.data.data.attributes,
-                };
-                return item;
-              }
-              return item;
-            }
-            return item;
-          });
-        }
-        if (method === "patch") {
-          newData = data.map((item) => {
-            if (item.id === response.data.data.id) {
-              return {
-                ...response.data.data,
-                id: response.data.data.id,
-              };
-            }
-            return item;
-          });
-        }
-        setData(newData);
-        register.value = "";
-        closeModal();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   return (
@@ -275,7 +230,7 @@ const Form = () => {
             </>
           )}
           <button type="submit">
-            {step.status[0] === "C" ? "Create a " : "Update the "}
+            {step.status[0] === "C" ? "Create " : "Update "}
             {step.status.split("").pop() === "B" ? "Job" : "Step"}
           </button>
         </form>
@@ -285,3 +240,4 @@ const Form = () => {
 };
 
 export default Form;
+// export default handleFormSubmit;

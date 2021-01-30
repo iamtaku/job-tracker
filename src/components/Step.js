@@ -1,9 +1,8 @@
 import Moment from "react-moment";
 import "moment-timezone";
 import styled from "styled-components";
-import { AiFillEdit } from "react-icons/ai";
 import { useGlobalContext } from "../context";
-
+import { EditButton } from "./Buttons";
 const StepContainer = styled.div`
   margin: 0 8px;
   text-align: center;
@@ -15,13 +14,6 @@ const StepContainer = styled.div`
     opacity: 0.8;
   }
 `;
-const EditBtn = styled.button`
-  background: none;
-  border: none;
-  position: absolute;
-  top: 4px;
-  right: 4px;
-`;
 
 const Step = ({ id, date, status, job_id }) => {
   const { openModal } = useGlobalContext();
@@ -32,9 +24,7 @@ const Step = ({ id, date, status, job_id }) => {
         {date}
       </Moment>
       <h3>{status}</h3>
-      <EditBtn onClick={openModal} data-id="PATCH_STEP" id={id}>
-        <AiFillEdit />
-      </EditBtn>
+      <EditButton onClick={openModal} dataid="PATCH_STEP" id={id} />
     </StepContainer>
   );
 };
