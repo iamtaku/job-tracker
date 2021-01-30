@@ -53,7 +53,7 @@ const AppProvider = ({ children }) => {
     }
 
     HandleFormSubmit({
-      url: `http://localhost:3000/api/v1/jobs/${formData.id}`,
+      url: `${url}/${formData.id}`,
       formData: formData.attributes,
       formType: "job",
       method: "patch",
