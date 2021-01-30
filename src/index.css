@@ -18,6 +18,11 @@ code {
     monospace;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body,
 h1,
 h2,
