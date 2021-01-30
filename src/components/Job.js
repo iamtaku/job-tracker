@@ -2,32 +2,57 @@ import Step from "./Step";
 import styled from "styled-components";
 import { useGlobalContext } from "../context";
 import { EditButton, NextButton, AcceptRejectButton } from "./Buttons";
+import { device } from "../device";
 
 const JobWrapper = styled.div`
-  display: flex;
-  margin: 8px;
+  display: grid;
+
+  @media ${device.laptop} {
+    grid-template-columns: 1fr 2fr;
+  }
 `;
 
 const JobCard = styled.div`
   display: flex;
+  justify-content: space-between;
   padding: 8px;
   align-items: center;
   position: relative;
   margin-right: 8px;
 `;
 
-const RightSide = styled.div`
+const JobCardRightSide = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 8px;
+  align-items: flex-end;
   p {
     font-style: italic;
   }
 `;
 
-const StepGrid = styled.div`
+const StepContainer = styled.div`
   display: flex;
+  overflow-x: auto;
+  height: 150px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    width: 100px;
+    height: 50px;
+  }
+
+  @media ${device.laptop} {
+    justify-content: space-between;
+  }
+`;
+
+const AcceptRejectButtonsContainer = styled.div`
+  display: flex;
+  // justify-content: flex-end;
+  align-item: flex-end;
 `;
 
 const Job = ({ company, position, status, steps, id }) => {
@@ -36,30 +61,30 @@ const Job = ({ company, position, status, steps, id }) => {
     <JobWrapper>
       <JobCard>
         <h2>{company}</h2>
-        <RightSide>
+        <JobCardRightSide>
           <p>{status}</p>
           <h3>{position}</h3>
-        </RightSide>
+        </JobCardRightSide>
         <EditButton id={id} onClick={openModal} dataid="PATCH_JOB" />
       </JobCard>
-      <StepGrid>
+      <StepContainer>
         {steps
           .sort((a, b) => parseInt(a.id) - parseInt(b.id))
           .map((step) => (
             <Step key={step.id} {...step} />
           ))}
-      </StepGrid>
-      <NextButton id={id} onClick={openModal}>
-        Next Step
-      </NextButton>
-      <div className="right">
-        <AcceptRejectButton onClick={handleJob} id={id} datajob="accept">
-          accepted
-        </AcceptRejectButton>
-        <AcceptRejectButton onClick={handleJob} id={id} datajob="reject">
-          rejected
-        </AcceptRejectButton>
-      </div>
+        <NextButton id={id} onClick={openModal}>
+          Next Step
+        </NextButton>
+        <AcceptRejectButtonsContainer>
+          <AcceptRejectButton onClick={handleJob} id={id} datajob="accept">
+            accepted
+          </AcceptRejectButton>
+          <AcceptRejectButton onClick={handleJob} id={id} datajob="reject">
+            rejected
+          </AcceptRejectButton>
+        </AcceptRejectButtonsContainer>
+      </StepContainer>
     </JobWrapper>
   );
 };
