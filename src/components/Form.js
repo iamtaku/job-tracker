@@ -137,21 +137,22 @@ const Form = () => {
 
   const onSubmit = (formData) => {
     reset();
-    let url = "http://localhost:3000/api/v1/jobs";
+    // let url = "http://localhost:3000/api/v1/";
+    let url = "https://calm-lake-84810.herokuapp.com/api/v1/";
     let formType = "job";
     let method = "post";
 
     if (step.status === "PATCH_JOB") {
-      url = `http://localhost:3000/api/v1/jobs/${step.job_id}`;
+      url = `${url}jobs/${step.job_id}`;
       method = "patch";
     }
     if (step.status === "CREATE_STEP") {
-      url = `http://localhost:3000/api/v1/jobs/${step.step_id}/steps`;
+      url = `${url}jobs/${step.step_id}/steps`;
       formType = "step";
     }
 
     if (step.status === "PATCH_STEP") {
-      url = `http://localhost:3000/api/v1/steps/${step.step_id}/`;
+      url = `${url}steps/${step.step_id}/`;
       formType = "step";
       method = "patch";
     }
