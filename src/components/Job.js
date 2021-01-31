@@ -68,11 +68,12 @@ const Job = ({ company, position, status, steps, id }) => {
         <EditButton id={id} onClick={openModal} dataid="PATCH_JOB" />
       </JobCard>
       <StepContainer>
-        {steps
-          .sort((a, b) => parseInt(a.id) - parseInt(b.id))
-          .map((step) => (
+        {
+          steps.map((step) => (
             <Step key={step.id} {...step} />
-          ))}
+          ))
+          // .sort((a, b) => parseInt(a.id) - parseInt(b.id))
+        }
         <NextButton id={id} onClick={openModal}>
           Next Step
         </NextButton>

@@ -13,7 +13,7 @@ const Jobs = () => {
   }
   return (
     <div>
-      {data.map((item) => {
+      {data.map((item, index) => {
         return <Job key={item.id} {...item.attributes} id={item.id} />;
       })}
     </div>
