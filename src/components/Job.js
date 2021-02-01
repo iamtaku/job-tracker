@@ -32,27 +32,33 @@ const JobCardRightSide = styled.div`
 `;
 
 const StepContainer = styled.div`
-  display: flex;
+  display: grid;
   overflow-x: auto;
   height: 150px;
+
   ::-webkit-scrollbar {
     display: none;
   }
 
-  * {
-    width: 100px;
-    height: 50px;
-  }
+  // * {
+  //   width: 100px;
+  // }
 
   @media ${device.laptop} {
-    justify-content: space-between;
+    grid-template-columns: 2fr 1fr;
+    overflow-x: visible;
+    height: 88px;
   }
 `;
 
 const AcceptRejectButtonsContainer = styled.div`
   display: flex;
-  // justify-content: flex-end;
-  align-item: flex-end;
+  justify-content: flex-end;
+`;
+
+const StepLeft = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Job = ({ company, position, status, steps, id }) => {
@@ -68,15 +74,14 @@ const Job = ({ company, position, status, steps, id }) => {
         <EditButton id={id} onClick={openModal} dataid="PATCH_JOB" />
       </JobCard>
       <StepContainer>
-        {
-          steps.map((step) => (
+        <StepLeft>
+          {steps.map((step) => (
             <Step key={step.id} {...step} />
-          ))
-          // .sort((a, b) => parseInt(a.id) - parseInt(b.id))
-        }
-        <NextButton id={id} onClick={openModal}>
-          Next Step
-        </NextButton>
+          ))}
+          <NextButton id={id} onClick={openModal}>
+            Next Step
+          </NextButton>
+        </StepLeft>
         <AcceptRejectButtonsContainer>
           <AcceptRejectButton onClick={handleJob} id={id} datajob="accept">
             accepted

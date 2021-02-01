@@ -13,6 +13,9 @@ const StepContainer = styled.div`
     font-weight: 500;
     opacity: 0.8;
   }
+  p {
+    color: #426696;
+  }
 `;
 
 const Step = ({ id, date, status, job_id }) => {
@@ -23,7 +26,7 @@ const Step = ({ id, date, status, job_id }) => {
       <Moment tz="Europe/London" format="MM/DD - HH:mm">
         {date}
       </Moment>
-      <h3>{status}</h3>
+      <p>{status}</p>
       <EditButton onClick={openModal} dataid="PATCH_STEP" id={id} />
     </StepContainer>
   );
