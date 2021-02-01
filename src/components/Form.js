@@ -77,7 +77,6 @@ const FormContainer = styled.div`
     color: white;
     text-transform: uppercase;
     border: none;
-    // margin-top: 20px;
     padding: 10px 15px;
     font-size: 16px;
     font-weight: bold;
@@ -235,7 +234,7 @@ const Form = () => {
           )}
           <button type="submit">
             {step.status[0] === "C" ? "Create " : "Update "}
-            {step.status.split("").pop() === "B" ? "Job" : "Step"}
+            {/* {step.status.split("").pop() === "B" ? "Job" : "Step"} */}
           </button>
         </form>
       </FormContainer>
