@@ -22,7 +22,7 @@ const Btn = styled.button`
   font-family: "Poppins", sans-serif;
   font-weight: bold;
   font-size: 18px;
-  color: white;
+  color: #426696;
 `;
 
 const DashboardTop = styled.div`

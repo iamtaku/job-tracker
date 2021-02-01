@@ -53,7 +53,7 @@ export const EditButton = (props) => {
 
 export const NextButton = (props) => {
   return (
-    <NewStepBtn id={props.id} onClick={props.onClick}>
+    <NewStepBtn id={props.id} onClick={props.onClick} data-id={props.dataid}>
       {props.children}
     </NewStepBtn>
   );

@@ -94,7 +94,7 @@ const Job = ({ company, position, status, steps, id }) => {
           {steps.map((step) => (
             <Step key={step.id} {...step} />
           ))}
-          <NextButton id={id} onClick={openModal}>
+          <NextButton dataid="NEXT_STEP" id={id} onClick={openModal}>
             <AiOutlinePlus />
           </NextButton>
         </StepLeft>

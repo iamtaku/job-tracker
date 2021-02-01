@@ -26,7 +26,7 @@ const AppProvider = ({ children }) => {
 
   const openModal = (e) => {
     // console.log("context :", e.currentTarget.id, e.currentTarget, data);
-    e.currentTarget.innerText === "NEXT STEP" &&
+    e.currentTarget.dataset.id === "NEXT_STEP" &&
       setStep({ status: "CREATE_STEP", step_id: parseInt(e.currentTarget.id) });
     e.currentTarget.dataset.id === "PATCH_STEP" &&
       setStep({ status: "PATCH_STEP", step_id: parseInt(e.currentTarget.id) });
