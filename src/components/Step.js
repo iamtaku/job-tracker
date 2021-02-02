@@ -10,12 +10,13 @@ const StepContainer = styled.div`
   margin: 0 8px;
   text-align: center;
   position: relative;
-border-radius: 50px;
+border-radius: 35px;
 background: #d2deef;
 box-shadow:  18px 18px 36px #b3bdcb,
              -18px -18px 36px #f2ffff;
   padding: 8px;
   margin-right: 8px;
+  opacity: 0.5;
 
   time {
     color: #658ec6;
@@ -23,7 +24,7 @@ box-shadow:  18px 18px 36px #b3bdcb,
     opacity: 0.8;
   }
   p {
-    color: #426696;
+    color: black;
   }
   @media ${device.laptop} {
     height: 64px;
