@@ -4,8 +4,13 @@ import axios from "axios";
 import { HandleFormSubmit } from "./helpers";
 
 // const url = "http://localhost:3000/api/v1/jobs";
-const url = "https://calm-lake-84810.herokuapp.com/api/v1/jobs";
+// const url = "https://calm-lake-84810.herokuapp.com/api/v1/jobs";
+const url = "https://blooming-depths-62038.herokuapp.com/api/v1/jobs";
 const AppContext = React.createContext();
+let user = [
+  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZDFjNzlkMjUtYWI0My00Y2FhLThhNmQtMWVhMmJiZWQxNzAxIn0.pXKDUoOJyT70mUo7gXRZj7eexakRLVNGl-QPruCCipQ",
+  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjc5NDIwYjEtMTEzMS00ZDdlLTllN2MtMWM5OTdiZGM3ODAzIn0.fvoJtcQOpHkg4xOf6knbNl1NLgU0WmRBMJWxJ0BH4iU",
+];
 
 const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +20,11 @@ const AppProvider = ({ children }) => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${user[1]}`,
+        },
+      });
       if (response.status === 200) {
         setData(response.data.data);
       }
@@ -29,7 +38,7 @@ const AppProvider = ({ children }) => {
     e.currentTarget.dataset.id === "NEXT_STEP" &&
       setStep({ status: "CREATE_STEP", step_id: parseInt(e.currentTarget.id) });
     e.currentTarget.dataset.id === "PATCH_STEP" &&
-      setStep({ status: "PATCH_STEP", step_id: parseInt(e.currentTarget.id) });
+      setStep({ status: "PATCH_STEP", step_id: e.currentTarget.id });
     e.currentTarget.dataset.id === "CREATE_JOB" &&
       setStep({ status: "CREATE_JOB" });
     e.currentTarget.dataset.id === "PATCH_JOB" &&
@@ -61,7 +70,6 @@ const AppProvider = ({ children }) => {
       setData,
     });
   };
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);

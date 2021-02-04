@@ -1,5 +1,8 @@
 import axios from "axios";
-
+let user = [
+  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZDFjNzlkMjUtYWI0My00Y2FhLThhNmQtMWVhMmJiZWQxNzAxIn0.pXKDUoOJyT70mUo7gXRZj7eexakRLVNGl-QPruCCipQ",
+  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjc5NDIwYjEtMTEzMS00ZDdlLTllN2MtMWM5OTdiZGM3ODAzIn0.fvoJtcQOpHkg4xOf6knbNl1NLgU0WmRBMJWxJ0BH4iU",
+];
 export const HandleFormSubmit = ({
   url,
   formData,
@@ -8,9 +11,18 @@ export const HandleFormSubmit = ({
   data,
   setData,
 }) => {
-  axios[method](url, {
-    [formType]: { ...formData },
-  })
+  console.log(url, formData, formType, method);
+  axios[method](
+    url,
+    {
+      [formType]: { ...formData },
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${user[1]}`,
+      },
+    }
+  )
     .then((response) => {
       let newData = [...data, response.data.data];
       if (formType === "step") {

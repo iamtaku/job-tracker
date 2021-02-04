@@ -3,6 +3,9 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
+import Moment from "react-moment";
+import "moment-timezone";
+import moment from "moment";
 
 const FormWrapper = styled.div`
   position: fixed;
@@ -120,8 +123,17 @@ const Form = () => {
             if (s.id === step.step_id || s.id === step.job_id) {
               newFormData = s;
               let { date } = newFormData;
-              date = new Date(date);
-              newFormData.date = date.toISOString();
+              // date = new Date(date);
+              console.log("before format ", date);
+              const test = moment.utc(date).format("yyyy-MM-DDThh:mm");
+              console.log(test);
+              // <Moment tz="Europe/London" format="YYYY-MM-ddThh:mm">
+              //   {date}
+              // </Moment>
+              newFormData.date = test;
+              // newFormData.date = date.toISOString();
+
+              // console.log(test);
             }
           });
         });
@@ -137,7 +149,7 @@ const Form = () => {
   const onSubmit = (formData) => {
     reset();
     // let url = "http://localhost:3000/api/v1/";
-    let url = "https://calm-lake-84810.herokuapp.com/api/v1/";
+    let url = "https://blooming-depths-62038.herokuapp.com/api/v1/";
     let formType = "job";
     let method = "post";
 
@@ -158,6 +170,7 @@ const Form = () => {
       formType = "step";
       method = "patch";
     }
+    console.log(formData);
 
     HandleFormSubmit({ url, formData, formType, method, data, setData });
     register.value = "";
