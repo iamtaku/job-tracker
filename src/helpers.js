@@ -11,7 +11,7 @@ export const HandleFormSubmit = ({
   data,
   setData,
 }) => {
-  console.log(url, formData, formType, method);
+  // console.log("before submit: ", formData);
   axios[method](
     url,
     {
@@ -24,23 +24,24 @@ export const HandleFormSubmit = ({
     }
   )
     .then((response) => {
+      // console.log("response back", response);
       let newData = [...data, response.data.data];
       if (formType === "step") {
         newData = data.map((item) => {
           if (item.id === response.data.data.relationships.job.data.id) {
             if (method === "post") {
               item.attributes.steps.push({
-                id: parseInt(response.data.data.id),
+                id: response.data.data.id,
                 ...response.data.data.attributes,
               });
               return item;
             }
             if (method === "patch") {
               let itemToUpdate = item.attributes.steps.findIndex(
-                (item) => item.id === parseInt(response.data.data.id)
+                (item) => item.id === response.data.data.id
               );
               item.attributes.steps[itemToUpdate] = {
-                id: parseInt(response.data.data.id),
+                id: response.data.data.id,
                 ...response.data.data.attributes,
               };
               return item;

@@ -3,7 +3,6 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
-import Moment from "react-moment";
 import "moment-timezone";
 import moment from "moment";
 
@@ -123,17 +122,9 @@ const Form = () => {
             if (s.id === step.step_id || s.id === step.job_id) {
               newFormData = s;
               let { date } = newFormData;
-              // date = new Date(date);
-              console.log("before format ", date);
-              const test = moment.utc(date).format("yyyy-MM-DDThh:mm");
-              console.log(test);
-              // <Moment tz="Europe/London" format="YYYY-MM-ddThh:mm">
-              //   {date}
-              // </Moment>
-              newFormData.date = test;
-              // newFormData.date = date.toISOString();
-
-              // console.log(test);
+              newFormData.date = moment
+                .parseZone(date)
+                .format("yyyy-MM-DDThh:mm");
             }
           });
         });
@@ -142,6 +133,7 @@ const Form = () => {
         newFormData = data.filter((item) => item.id === step.job_id)[0];
         newFormData = newFormData.attributes;
       }
+      // console.log(newFormData);
       setFormDataValue(newFormData);
     }
   }, [step, data]);
@@ -170,7 +162,7 @@ const Form = () => {
       formType = "step";
       method = "patch";
     }
-    console.log(formData);
+    // console.log(formData);
 
     HandleFormSubmit({ url, formData, formType, method, data, setData });
     register.value = "";
