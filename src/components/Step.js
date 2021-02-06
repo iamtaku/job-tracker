@@ -1,5 +1,3 @@
-// import Moment from "react-moment";
-// import "moment-timezone";
 import moment from "moment";
 import styled from "styled-components";
 import { useGlobalContext } from "../context";
@@ -41,7 +39,6 @@ const Step = ({ id, date, status, job_id }) => {
   const dateFormated = moment.parseZone(date).format("MM/DD - HH:mm");
   return (
     <StepContainer>
-      {/* <Moment tz=""  format="MM/DD - HH:mm">{date}</Moment> */}
       {dateFormated}
       <p>{status}</p>
       <EditButton onClick={openModal} dataid="PATCH_STEP" id={id} />

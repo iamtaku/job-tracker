@@ -3,7 +3,6 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
-import "moment-timezone";
 import moment from "moment";
 
 const FormWrapper = styled.div`
@@ -122,9 +121,9 @@ const Form = () => {
             if (s.id === step.step_id || s.id === step.job_id) {
               newFormData = s;
               let { date } = newFormData;
-              newFormData.date = moment
-                .parseZone(date)
-                .format("yyyy-MM-DDThh:mm");
+              newFormData.date = moment(date)
+                .utc(false)
+                .format("yyyy-MM-DDTHH:mm");
             }
           });
         });
@@ -133,7 +132,7 @@ const Form = () => {
         newFormData = data.filter((item) => item.id === step.job_id)[0];
         newFormData = newFormData.attributes;
       }
-      // console.log(newFormData);
+      console.log(newFormData);
       setFormDataValue(newFormData);
     }
   }, [step, data]);
