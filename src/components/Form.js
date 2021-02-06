@@ -3,6 +3,8 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
+import "moment-timezone";
+import moment from "moment";
 
 const FormWrapper = styled.div`
   position: fixed;
@@ -77,7 +79,6 @@ const FormContainer = styled.div`
     color: white;
     text-transform: uppercase;
     border: none;
-    // margin-top: 20px;
     padding: 10px 15px;
     font-size: 16px;
     font-weight: bold;
@@ -121,8 +122,9 @@ const Form = () => {
             if (s.id === step.step_id || s.id === step.job_id) {
               newFormData = s;
               let { date } = newFormData;
-              date = new Date(date);
-              newFormData.date = date.toISOString();
+              newFormData.date = moment
+                .parseZone(date)
+                .format("yyyy-MM-DDThh:mm");
             }
           });
         });
@@ -131,6 +133,7 @@ const Form = () => {
         newFormData = data.filter((item) => item.id === step.job_id)[0];
         newFormData = newFormData.attributes;
       }
+      // console.log(newFormData);
       setFormDataValue(newFormData);
     }
   }, [step, data]);
@@ -138,7 +141,7 @@ const Form = () => {
   const onSubmit = (formData) => {
     reset();
     // let url = "http://localhost:3000/api/v1/";
-    let url = "https://calm-lake-84810.herokuapp.com/api/v1/";
+    let url = "https://blooming-depths-62038.herokuapp.com/api/v1/";
     let formType = "job";
     let method = "post";
 
@@ -159,6 +162,7 @@ const Form = () => {
       formType = "step";
       method = "patch";
     }
+    // console.log(formData);
 
     HandleFormSubmit({ url, formData, formType, method, data, setData });
     register.value = "";
@@ -235,7 +239,7 @@ const Form = () => {
           )}
           <button type="submit">
             {step.status[0] === "C" ? "Create " : "Update "}
-            {step.status.split("").pop() === "B" ? "Job" : "Step"}
+            {/* {step.status.split("").pop() === "B" ? "Job" : "Step"} */}
           </button>
         </form>
       </FormContainer>

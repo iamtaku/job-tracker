@@ -3,12 +3,21 @@ import styled from "styled-components";
 import { useGlobalContext } from "../context";
 import { EditButton, NextButton, AcceptRejectButton } from "./Buttons";
 import { device } from "../device";
-
+import { GoCheck, GoX } from "react-icons/go";
+import { AiOutlinePlus } from "react-icons/ai";
 const JobWrapper = styled.div`
   display: grid;
+  grid-template-rows: 1fr 2fr;
   width: 100%;
+  background: #d2deef;
+
   @media ${device.laptop} {
     grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 35px 35px 70px #b3bdcb, -35px -35px 70px #f2ffff;
   }
 `;
 
@@ -35,24 +44,37 @@ const StepContainer = styled.div`
   display: flex;
   overflow-x: auto;
   height: 150px;
+  border-radius: 50px;
+  background: #d2deef;
+  box-shadow: inset 5px 5px 10px #b3bdcb, inset -5px -5px 10px #f2ffff;
+  padding: 8px;
+
   ::-webkit-scrollbar {
     display: none;
   }
 
-  * {
-    width: 100px;
-    height: 50px;
-  }
-
   @media ${device.laptop} {
-    justify-content: space-between;
+    grid-template-columns: 2fr 1fr;
+    overflow-x: visible;
+    height: 88px;
   }
 `;
 
 const AcceptRejectButtonsContainer = styled.div`
   display: flex;
-  // justify-content: flex-end;
-  align-item: flex-end;
+  justify-content: center;
+  flex-direction: column;
+
+  @media ${device.laptop} {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
+`;
+
+const StepLeft = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Job = ({ company, position, status, steps, id }) => {
@@ -68,21 +90,20 @@ const Job = ({ company, position, status, steps, id }) => {
         <EditButton id={id} onClick={openModal} dataid="PATCH_JOB" />
       </JobCard>
       <StepContainer>
-        {
-          steps.map((step) => (
+        <StepLeft>
+          {steps.map((step) => (
             <Step key={step.id} {...step} />
-          ))
-          // .sort((a, b) => parseInt(a.id) - parseInt(b.id))
-        }
-        <NextButton id={id} onClick={openModal}>
-          Next Step
-        </NextButton>
+          ))}
+          <NextButton dataid="NEXT_STEP" id={id} onClick={openModal}>
+            <AiOutlinePlus />
+          </NextButton>
+        </StepLeft>
         <AcceptRejectButtonsContainer>
           <AcceptRejectButton onClick={handleJob} id={id} datajob="accept">
-            accepted
+            <GoCheck />
           </AcceptRejectButton>
           <AcceptRejectButton onClick={handleJob} id={id} datajob="reject">
-            rejected
+            <GoX />
           </AcceptRejectButton>
         </AcceptRejectButtonsContainer>
       </StepContainer>
