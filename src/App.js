@@ -6,6 +6,7 @@ import { AppProvider } from "./context";
 import Home from "./pages/Home";
 import Error from "./pages/Error";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 // import components
 import Navbar from "./components/Navbar";
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <AppProvider>
           <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/login" component={Login} />
         </AppProvider>
         <Route path="*" component={Error} />
       </Switch>

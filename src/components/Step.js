@@ -31,14 +31,14 @@ box-shadow:  18px 18px 36px #b3bdcb,
     height: 64px;
     width: auto;
     padding: 10px;
-    margin-right: 12px;
+    margin: 0 12px;
   }
 `;
 
 const Step = ({ id, date, status, job_id }) => {
   const { openModal } = useGlobalContext();
   console.log("from step component: ", date);
-  const dateFormated = moment.parseZone(date).format("MM/DD - hh:mm");
+  const dateFormated = moment.parseZone(date).format("MM/DD - HH:mm");
   return (
     <StepContainer>
       {/* <Moment tz=""  format="MM/DD - HH:mm">{date}</Moment> */}

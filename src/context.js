@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useCallback } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import axios from "axios";
 import { HandleFormSubmit } from "./helpers";
 
@@ -17,6 +16,8 @@ const AppProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [step, setStep] = useState({ status: false, job_id: null });
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [token, setToken] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -33,10 +34,23 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const logOut = () => {
+    setLoggedIn(false);
+    window.localStorage.removeItem("jwt");
+  };
+
+  useEffect(() => {
+    let tokenJWT = window.localStorage.getItem("jwt") || false;
+    if (tokenJWT) {
+      setLoggedIn(true);
+      setToken(tokenJWT);
+    }
+  }, []);
+
   const openModal = (e) => {
     // console.log("context :", e.currentTarget.id, e.currentTarget, data);
     e.currentTarget.dataset.id === "NEXT_STEP" &&
-      setStep({ status: "CREATE_STEP", step_id: parseInt(e.currentTarget.id) });
+      setStep({ status: "CREATE_STEP", step_id: e.currentTarget.id });
     e.currentTarget.dataset.id === "PATCH_STEP" &&
       setStep({ status: "PATCH_STEP", step_id: e.currentTarget.id });
     e.currentTarget.dataset.id === "CREATE_JOB" &&
@@ -74,6 +88,8 @@ const AppProvider = ({ children }) => {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {});
+
   return (
     <AppContext.Provider
       value={{
@@ -87,6 +103,11 @@ const AppProvider = ({ children }) => {
         step,
         handleJob,
         HandleFormSubmit,
+        loggedIn,
+        setLoggedIn,
+        token,
+        setToken,
+        logOut,
       }}
     >
       {children}

@@ -3,6 +3,8 @@ import Jobs from ".././components/Jobs";
 import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { device } from "../device";
+import { useHistory, Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const DashboardWrapper = styled.div`
   width: 95%;
@@ -37,11 +39,25 @@ const DashboardTop = styled.div`
   }
 `;
 const Dashboard = () => {
-  const { isModalOpen, openModal } = useGlobalContext();
+  const { isModalOpen, openModal, loggedIn, setLoggedIn } = useGlobalContext();
+  const history = useHistory();
+
+  // if (!loggedIn) {
+  //   history.push("/");
+  // }
+  if (!loggedIn) {
+    return (
+      <div className="wrapper">
+        <h1>You are not logged in. Please login!</h1>
+        <Link to="/login">Login</Link>
+      </div>
+    );
+  }
   return (
     <DashboardWrapper>
       <DashboardTop>
         <h2>this is the dashboard page</h2>
+        {/* <h3>this is the current token: {token}</h3> */}
         <Btn onClick={openModal} data-id="CREATE_JOB">
           Create Job
         </Btn>
