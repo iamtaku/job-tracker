@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 const Login = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const { setToken, setLoggedIn } = useGlobalContext();
 
   const history = useHistory();
