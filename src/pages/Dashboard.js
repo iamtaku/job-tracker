@@ -4,7 +4,7 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { device } from "../device";
 import { useHistory, Link } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const DashboardWrapper = styled.div`
   width: 95%;
@@ -39,8 +39,8 @@ const DashboardTop = styled.div`
   }
 `;
 const Dashboard = () => {
-  const { isModalOpen, openModal, loggedIn, setLoggedIn } = useGlobalContext();
-  const history = useHistory();
+  const { isModalOpen, openModal, loggedIn } = useGlobalContext();
+  // const history = useHistory();
 
   // if (!loggedIn) {
   //   history.push("/");
