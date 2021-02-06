@@ -3,7 +3,6 @@ import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
-// import "moment-timezone";
 import moment from "moment";
 
 const FormWrapper = styled.div`
