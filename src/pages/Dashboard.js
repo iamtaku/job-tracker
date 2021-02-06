@@ -3,7 +3,7 @@ import Jobs from ".././components/Jobs";
 import { useGlobalContext } from "../context";
 import styled from "styled-components";
 import { device } from "../device";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { useEffect } from "react";
 
 const DashboardWrapper = styled.div`
@@ -40,11 +40,7 @@ const DashboardTop = styled.div`
 `;
 const Dashboard = () => {
   const { isModalOpen, openModal, loggedIn } = useGlobalContext();
-  // const history = useHistory();
 
-  // if (!loggedIn) {
-  //   history.push("/");
-  // }
   if (!loggedIn) {
     return (
       <div className="wrapper">
