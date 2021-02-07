@@ -114,12 +114,12 @@ const Form = () => {
 
   useEffect(() => {
     if (step.status === "PATCH_STEP" || step.status === "PATCH_JOB") {
-      let newFormData = "";
+      let newFormData;
       if (step.status === "PATCH_STEP") {
         data.forEach((item) => {
           item.attributes.steps.forEach((s) => {
             if (s.id === step.step_id || s.id === step.job_id) {
-              newFormData = s;
+              newFormData = { ...s };
               let { date } = newFormData;
               newFormData.date = moment(date)
                 .utc(false)
